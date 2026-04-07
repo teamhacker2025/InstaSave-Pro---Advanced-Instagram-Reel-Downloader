@@ -3,116 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NeonSave Pro | 100% Working Fix</title>
+    <title>NeonSave Pro | Final Fix 2026</title>
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        :root { --neon: #ff0050; --bg: #0a0a0a; }
+        :root { --neon: #ff0050; --bg: #050505; }
         body { background: var(--bg); color: white; font-family: 'Rajdhani', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .box { width: 90%; max-width: 420px; padding: 35px; border: 1px solid var(--neon); border-radius: 20px; text-align: center; background: rgba(255,255,255,0.03); box-shadow: 0 0 25px rgba(255,0,80,0.3); backdrop-filter: blur(10px); }
-        .logo { font-size: 2.5rem; color: var(--neon); text-shadow: 0 0 15px var(--neon); margin-bottom: 5px; font-weight: 800; }
-        input { width: 100%; padding: 15px; margin: 20px 0; background: #111; border: 1px solid #333; color: white; border-radius: 10px; box-sizing: border-box; outline: none; font-size: 1rem; transition: 0.3s; }
-        input:focus { border-color: var(--neon); box-shadow: 0 0 10px rgba(255,0,80,0.2); }
-        .btn { width: 100%; padding: 15px; background: var(--neon); border: none; color: white; font-weight: bold; cursor: pointer; border-radius: 10px; text-transform: uppercase; font-size: 1rem; transition: 0.3s; }
-        .btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px var(--neon); }
-        #loader { display: none; color: var(--neon); margin: 20px 0; font-weight: bold; font-size: 1.1rem; }
-        #result { display: none; margin-top: 25px; }
-        video { width: 100%; border-radius: 12px; border: 1px solid var(--neon); margin-bottom: 15px; }
-        .save-btn { display: block; width: 100%; padding: 15px; background: #00ff88; color: #000; text-decoration: none; font-weight: 800; border-radius: 10px; text-transform: uppercase; cursor: pointer; border: none; }
+        .container { width: 90%; max-width: 400px; padding: 40px; border: 2px solid var(--neon); border-radius: 20px; background: #000; box-shadow: 0 0 35px rgba(255,0,80,0.5); text-align: center; }
+        .logo { font-size: 2.5rem; color: var(--neon); text-shadow: 0 0 15px var(--neon); font-weight: 800; margin-bottom: 10px; }
+        .desc { color: #888; font-size: 0.9rem; margin-bottom: 30px; }
+        
+        /* Form Styling */
+        form { display: flex; flex-direction: column; gap: 15px; }
+        input[type="text"] { 
+            width: 100%; padding: 15px; background: #111; border: 1px solid #333; 
+            color: white; border-radius: 12px; outline: none; box-sizing: border-box;
+            border-left: 5px solid var(--neon); font-size: 1rem;
+        }
+        button { 
+            width: 100%; padding: 16px; background: var(--neon); border: none; 
+            color: white; font-weight: bold; cursor: pointer; border-radius: 12px; 
+            text-transform: uppercase; font-size: 1.1rem; transition: 0.3s;
+            box-shadow: 0 5px 15px rgba(255,0,80,0.3);
+        }
+        button:hover { background: #fff; color: var(--neon); transform: scale(1.02); }
+        
+        .features { margin-top: 30px; display: flex; justify-content: space-around; font-size: 0.75rem; color: #555; }
+        .features span { display: flex; flex-direction: column; align-items: center; gap: 5px; }
+        .features i { color: var(--neon); font-size: 1.2rem; }
     </style>
 </head>
 <body>
 
-<div class="box">
+<div class="container">
     <div class="logo">NEON SAVE</div>
-    <p style="color: #888; font-size: 0.9rem;">Direct Storage Download Mode Activated</p>
+    <p class="desc">Direct Gallery Download | No API Needed</p>
     
-    <input type="text" id="reelLink" placeholder="Paste Instagram Reel Link...">
-    <button class="btn" id="fetchBtn" onclick="getInstagramMedia()">Download Now</button>
-
-    <div id="loader"><i class="fas fa-shield-alt fa-spin"></i> BYPASSING INSTAGRAM...</div>
-
-    <div id="result">
-        <video id="player" controls crossorigin="anonymous"></video>
-        <button id="dlAction" class="save-btn" onclick="downloadToGallery()">
-            <i class="fas fa-download"></i> Save to Gallery
+    <form action="https://saveig.app/api/ajaxSearch" method="POST" target="_blank" onsubmit="return validate()">
+        <input type="hidden" name="t" value="media">
+        <input type="hidden" name="lang" value="en">
+        <input type="text" name="q" id="reelUrl" placeholder="Paste Instagram Reel Link..." required>
+        
+        <button type="submit">
+            <i class="fas fa-download"></i> DOWNLOAD TO GALLERY
         </button>
+    </form>
+
+    <div class="features">
+        <span><i class="fas fa-bolt"></i> FAST</span>
+        <span><i class="fas fa-shield-alt"></i> SECURE</span>
+        <span><i class="fas fa-hdd"></i> 4K HD</span>
     </div>
 </div>
 
 <script>
-    let finalVideoUrl = "";
-
-    async function getInstagramMedia() {
-        const url = document.getElementById('reelLink').value;
-        const loader = document.getElementById('loader');
-        const result = document.getElementById('result');
-        const btn = document.getElementById('fetchBtn');
-
-        if (!url.includes("instagram.com")) return alert("Bhai, sahi Instagram link dalo!");
-
-        loader.style.display = "block";
-        result.style.display = "none";
-        btn.disabled = true;
-
-        const options = {
-            method: 'GET',
-            headers: {
-                'x-rapidapi-key': '91fa362683msh4f85033b4bc0d37p1383b9jsn5d69fc388cd3',
-                'x-rapidapi-host': 'social-media-video-downloader.p.rapidapi.com'
-            }
-        };
-
-        try {
-            // Using a high-stability RapidAPI endpoint
-            const response = await fetch(`https://social-media-video-downloader.p.rapidapi.com/smvd/get/instagram?url=${encodeURIComponent(url)}`, options);
-            const data = await response.json();
-
-            // Checking for media in various possible API response structures
-            let mediaUrl = data.links?.[0]?.link || data.media || data.video_url;
-
-            if (mediaUrl) {
-                finalVideoUrl = mediaUrl;
-                document.getElementById('player').src = finalVideoUrl;
-                loader.style.display = "none";
-                result.style.display = "block";
-                btn.disabled = false;
-            } else {
-                throw new Error("No Media Found");
-            }
-        } catch (error) {
-            loader.style.display = "none";
-            btn.disabled = false;
-            alert("Error: Instagram is blocking this specific link or API limit reached. Try another reel!");
+    function validate() {
+        const url = document.getElementById('reelUrl').value;
+        if (!url.includes("instagram.com")) {
+            alert("Bhai, valid Instagram link dalo!");
+            return false;
         }
-    }
-
-    // GALLERY MEIN DIRECT SAVE KARNE KA CODE
-    async function downloadToGallery() {
-        const dlBtn = document.getElementById('dlAction');
-        dlBtn.innerHTML = "SAVING TO STORAGE...";
-        dlBtn.style.background = "#fff";
-
-        try {
-            const response = await fetch(finalVideoUrl);
-            const blob = await response.blob();
-            const blobUrl = window.URL.createObjectURL(blob);
-            
-            const a = document.createElement('a');
-            a.style.display = 'none';
-            a.href = blobUrl;
-            a.download = `InstaReel_Neon_${Date.now()}.mp4`;
-            document.body.appendChild(a);
-            a.click();
-            window.URL.revokeObjectURL(blobUrl);
-            
-            dlBtn.innerHTML = "✓ SAVED TO GALLERY";
-            dlBtn.style.background = "#00ff88";
-        } catch (e) {
-            // Fallback: If blob fails, open link in new tab for manual save
-            window.open(finalVideoUrl, '_blank');
-            dlBtn.innerHTML = "OPENED IN NEW TAB";
-        }
+        // Button text change for feedback
+        document.querySelector('button').innerHTML = "<i class='fas fa-sync fa-spin'></i> PROCESSING...";
+        return true;
     }
 </script>
 
